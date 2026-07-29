@@ -3,51 +3,61 @@ package org.kgromov.model;
 import java.math.BigDecimal;
 
 public class CountryLanguage {
-    private String CountryCode;
-    private String Language;
-    private Boolean IsOfficial;
-    private BigDecimal Percentage;
+    private String code;
+    private String language;
+    private Boolean official;
+    private BigDecimal usage;
 
 
     public CountryLanguage() {
     }
 
-    public CountryLanguage(String countryCode, Boolean isOfficial, String language, BigDecimal Percentage) {
-        CountryCode = countryCode;
-        IsOfficial = isOfficial;
-        Language = language;
-        this.Percentage = Percentage;
+    public CountryLanguage(String code, Boolean official, String language, BigDecimal usage) {
+        this.code = code;
+        this.official = official;
+        this.language = language;
+        this.usage = usage;
     }
 
-    public String getCountryCode() {
-        return CountryCode;
+    public String getCode() {
+        return code;
     }
 
-    public void setCountryCode(String countryCode) {
-        CountryCode = countryCode;
+    public void setCode(String code) {
+        this.code = code;
     }
 
     public Boolean getOfficial() {
-        return IsOfficial;
+        return official;
     }
 
     public void setOfficial(Boolean official) {
-        IsOfficial = official;
+        this.official = official;
     }
 
     public String getLanguage() {
-        return Language;
+        return language;
     }
 
     public void setLanguage(String language) {
-        Language = language;
+        this.language = language;
     }
 
-    public BigDecimal getPercentage() {
-        return Percentage;
+    public BigDecimal getUsage() {
+        return usage;
     }
 
-    public void setPercentage(BigDecimal percentage) {
-        this.Percentage = percentage;
+    public void setUsage(BigDecimal usage) {
+        this.usage = usage;
+    }
+
+    @Override
+    public String toString() {
+        return "CountryLanguage{" +
+                "code='" + code + '\'' +
+                ", language='" + language + '\'' +
+                ", official=" + official +
+                ", usage=" + usage +
+                '}';
     }
 }
