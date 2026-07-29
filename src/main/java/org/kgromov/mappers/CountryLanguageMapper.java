@@ -3,27 +3,26 @@ package org.kgromov.mappers;
 import org.apache.ibatis.annotations.*;
 import org.kgromov.model.CountryLanguage;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 @Mapper
 public interface CountryLanguageMapper {
 
-    @Select("SELECT * FROM countrylanguage")
-    @ConstructorArgs({
-            @Arg(id = true, name = "code", javaType = String.class, column = "CountryCode"),
-            @Arg(id = true, name = "language", javaType = String.class, column = "Language"),
-            @Arg(name = "official", javaType = Boolean.class, column = "IsOfficial"),
-            @Arg(name = "usage", javaType = BigDecimal.class, column = "Percentage")
+    @Select("SELECT * FROM countrylanguage ORDER BY CountryCode")
+    @Results({
+            @Result(id = true, property = "code", column = "CountryCode"),
+            @Result(id = true, property = "language", column = "Language"),
+            @Result(property = "official", column = "IsOfficial"),
+            @Result(property = "usage", column = "Percentage")
     })
     List<CountryLanguage> findAll();
 
     @Select("SELECT * FROM countrylanguage WHERE countrycode = #{CountryCode} AND language = #{Language}")
-    @ConstructorArgs({
-            @Arg(id = true, name = "code", javaType = String.class, column = "CountryCode"),
-            @Arg(id = true, name = "language", javaType = String.class, column = "Language"),
-            @Arg(name = "official", javaType = Boolean.class, column = "IsOfficial"),
-            @Arg(name = "usage", javaType = BigDecimal.class, column = "Percentage")
+    @Results({
+            @Result(id = true, property = "code", column = "CountryCode"),
+            @Result(id = true, property = "language", column = "Language"),
+            @Result(property = "official", column = "IsOfficial"),
+            @Result(property = "usage", column = "Percentage")
     })
     CountryLanguage findById(@Param("CountryCode") String code,
                              @Param("Language") String language);

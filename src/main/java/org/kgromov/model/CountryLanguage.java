@@ -1,11 +1,17 @@
 package org.kgromov.model;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import java.math.BigDecimal;
 
-public record CountryLanguage(
-        String code,
-        String language,
-        Boolean official,
-        BigDecimal usage
-) {
+@NoArgsConstructor
+@AllArgsConstructor
+@Data
+public class CountryLanguage {
+    private String code;
+    private String language;
+    private Boolean official;
+    private BigDecimal usage;
 }
