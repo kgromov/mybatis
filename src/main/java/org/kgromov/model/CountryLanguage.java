@@ -6,17 +6,17 @@ public class CountryLanguage {
     private String CountryCode;
     private String Language;
     private Boolean IsOfficial;
-    private BigDecimal usage;
+    private BigDecimal Percentage;
 
 
     public CountryLanguage() {
     }
 
-    public CountryLanguage(String countryCode, Boolean isOfficial, String language, BigDecimal usage) {
+    public CountryLanguage(String countryCode, Boolean isOfficial, String language, BigDecimal Percentage) {
         CountryCode = countryCode;
         IsOfficial = isOfficial;
         Language = language;
-        this.usage = usage;
+        this.Percentage = Percentage;
     }
 
     public String getCountryCode() {
@@ -43,11 +43,11 @@ public class CountryLanguage {
         Language = language;
     }
 
-    public BigDecimal getUsage() {
-        return usage;
+    public BigDecimal getPercentage() {
+        return Percentage;
     }
 
-    public void setUsage(BigDecimal usage) {
-        this.usage = usage;
+    public void setPercentage(BigDecimal percentage) {
+        this.Percentage = percentage;
     }
 }
