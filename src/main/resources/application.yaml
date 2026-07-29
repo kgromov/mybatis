@@ -1,0 +1,14 @@
+spring:
+  application:
+    name: mybatis
+
+  datasource:
+    url: jdbc:mysql://localhost:3306/flyway
+    username: root
+    password: admin
+    driverClassName: com.mysql.cj.jdbc.Driver
+
+mybatis:
+  configuration:
+    map-underscore-to-camel-case: true
+  mapper-locations: classpath:mapper/*.xml
