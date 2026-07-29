@@ -10,8 +10,8 @@ public interface CountryLanguageMapper {
 
     @Select("SELECT * FROM countrylanguage ORDER BY CountryCode")
     @Results({
-            @Result(id = true, property = "code", column = "CountryCode"),
-            @Result(id = true, property = "language", column = "Language"),
+            @Result(id = true, property = "id.code", column = "CountryCode"),
+            @Result(id = true, property = "id.language", column = "Language"),
             @Result(property = "official", column = "IsOfficial"),
             @Result(property = "usage", column = "Percentage")
     })
@@ -19,8 +19,8 @@ public interface CountryLanguageMapper {
 
     @Select("SELECT * FROM countrylanguage WHERE countrycode = #{CountryCode} AND language = #{Language}")
     @Results({
-            @Result(id = true, property = "code", column = "CountryCode"),
-            @Result(id = true, property = "language", column = "Language"),
+            @Result(id = true, property = "id.code", column = "CountryCode"),
+            @Result(id = true, property = "id.language", column = "Language"),
             @Result(property = "official", column = "IsOfficial"),
             @Result(property = "usage", column = "Percentage")
     })

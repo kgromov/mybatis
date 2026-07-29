@@ -10,8 +10,7 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 @Data
 public class CountryLanguage {
-    private String code;
-    private String language;
+    private LanguageCode id;
     private Boolean official;
     private BigDecimal usage;
 }
