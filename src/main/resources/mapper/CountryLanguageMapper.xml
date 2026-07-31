@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="org.kgromov.mappers.ICountryLanguageMapper">
+    <resultMap id="CountryLanguageMap" type="org.kgromov.model.CountryLanguage">
+        <id property="id.code" column="CountryCode" />
+        <id property="id.language" column="Language" />
+
+        <result property="official" column="IsOfficial" />
+        <result property="usage" column="Percentage" />
+    </resultMap>
+
+
+    <select id="findAll" resultType="org.kgromov.model.CountryLanguage" resultMap="CountryLanguageMap">
+        SELECT * FROM countrylanguage ORDER BY CountryCode
+    </select>
+
+    <select id="findById"
+            resultType="org.kgromov.model.CountryLanguage"
+            parameterType="org.kgromov.model.LanguageCode"
+            resultMap="CountryLanguageMap">
+        SELECT * FROM countrylanguage WHERE CountryCode = #{code} AND Language = #{language}
+    </select>
+
+    <insert id="insert" parameterType="org.kgromov.model.CountryLanguage">
+        INSERT INTO countrylanguage (CountryCode, Language, IsOfficial, Percentage) VALUES (#{code}, #{language}, #{official}, #{usage})
+    </insert>
+
+    <update id="update" parameterType="org.kgromov.model.CountryLanguage">
+        UPDATE countrylanguage SET Percentage = #{usage}, IsOfficial = #{official} WHERE CountryCode = #{code} AND Language = #{language}
+    </update>
+
+    <delete id="delete" parameterType="map">
+        DELETE FROM countrylanguage WHERE CountryCode = #{code} AND Language = #{language}
+    </delete>
+
+</mapper>

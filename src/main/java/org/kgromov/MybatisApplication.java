@@ -1,6 +1,8 @@
 package org.kgromov;
 
 import org.kgromov.mappers.CountryLanguageMapper;
+import org.kgromov.mappers.ICountryLanguageMapper;
+import org.kgromov.model.LanguageCode;
 import org.mybatis.spring.annotation.MapperScan;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,6 +27,7 @@ public class MybatisApplication {
             var allCountryLanguageCodes = countryLanguageMapper.findAll();
             log.info("All country language codes: {}", allCountryLanguageCodes);
             var countryLanguageCode = countryLanguageMapper.findById("UKR", "Ukrainian");
+//            var countryLanguageCode = countryLanguageMapper.findById(new LanguageCode("UKR", "Ukrainian"));
             log.info("Country language code: {}", countryLanguageCode);
             int a = 1;
         };
