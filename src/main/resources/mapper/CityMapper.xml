@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.kgromov.mappers.CityMapper">
+    <resultMap id="CityMapperMap" type="org.kgromov.model.City">
+        <id property="id" column="ID" />
+        <result property="name" column="Name" />
+        <result property="district" column="District" />
+        <result property="population" column="Population" />
+
+        <association property="country" javaType="org.kgromov.model.Country">
+            <id property="code" column="Code"/>
+            <result property="name" column="country_name"/>
+        </association>
+    </resultMap>
+
+    <select id="findAll" resultType="org.kgromov.model.City" resultMap="CityMapperMap">
+        SELECT c.ID, c.Name, c.District, c.Population, co.Code, co.Name as country_name
+        FROM city c
+        JOIN country co ON c.CountryCode = co.Code
+        ORDER BY #{c.name}
+    </select>
+
+    <select id="findById" resultType="org.kgromov.model.City" resultMap="CityMapperMap">
+        SELECT * FROM city WHERE ID = #{id}
+    </select>
+</mapper>

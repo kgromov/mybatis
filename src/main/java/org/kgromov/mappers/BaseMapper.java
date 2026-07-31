@@ -2,7 +2,7 @@ package org.kgromov.mappers;
 
 import java.util.List;
 
-public interface ModelMapper<T, ID> {
+public interface BaseMapper<T, ID> {
 
     List<T> findAll();
 

@@ -30,7 +30,7 @@
         UPDATE countrylanguage SET Percentage = #{usage}, IsOfficial = #{official} WHERE CountryCode = #{code} AND Language = #{language}
     </update>
 
-    <delete id="delete" parameterType="map">
+    <delete id="delete" parameterType="org.kgromov.model.LanguageCode">
         DELETE FROM countrylanguage WHERE CountryCode = #{code} AND Language = #{language}
     </delete>
 

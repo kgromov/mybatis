@@ -7,7 +7,7 @@ import org.kgromov.model.LanguageCode;
 import java.util.List;
 
 @Mapper
-public interface ICountryLanguageMapper extends ModelMapper<CountryLanguage, LanguageCode> {
+public interface ICountryLanguageMapper extends BaseMapper<CountryLanguage, LanguageCode> {
 
     List<CountryLanguage> findAll();
 
@@ -17,5 +17,5 @@ public interface ICountryLanguageMapper extends ModelMapper<CountryLanguage, Lan
 
     int update(CountryLanguage t);
 
-    int delete(String code, String language);
+    int delete(LanguageCode id);
 }
