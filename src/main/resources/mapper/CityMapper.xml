@@ -26,4 +26,12 @@
         JOIN country co ON c.CountryCode = co.Code
         WHERE ID = #{id}
     </select>
+
+    <select id="findAllByCountryCode" resultType="org.kgromov.model.City" resultMap="CityMapperMap">
+        SELECT c.*, co.Name as country_name
+        FROM city c
+        JOIN country co ON c.CountryCode = co.Code
+        WHERE c.CountryCode = #{countryCode}
+        ORDER BY c.Name
+    </select>
 </mapper>

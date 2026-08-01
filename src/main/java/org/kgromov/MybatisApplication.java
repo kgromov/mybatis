@@ -35,9 +35,11 @@ public class MybatisApplication {
             log.info("Country language code: {}", countryLanguageCode);
 
             var cities = cityMapper.findAll();
-//            log.info("All cities: {}", cities);
+            log.debug("All cities: {}", cities);
             var city = cityMapper.findById(1L);
             log.info("City: {}", city);
+            var citiesByCountryCode = cityMapper.findAllByCountryCode("AFG");
+            log.info("Cities by country code: {}", citiesByCountryCode);
         };
     }
 
