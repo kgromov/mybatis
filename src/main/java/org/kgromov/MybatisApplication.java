@@ -1,8 +1,6 @@
 package org.kgromov;
 
 import org.kgromov.mappers.*;
-import org.kgromov.model.City;
-import org.kgromov.model.LanguageCode;
 import org.mybatis.spring.annotation.MapperScan;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,8 +8,6 @@ import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
-
-import java.util.List;
 
 
 @MapperScan("org.kgromov.mappers")
@@ -25,8 +21,8 @@ public class MybatisApplication {
 
     @Bean
     ApplicationRunner applicationRunner(
-            CountryLanguageMapper countryLanguageMapper,
-            CityMapper cityMapper,
+            CountryLanguageJavaMapper countryLanguageMapper,
+            CityJavaMapper cityMapper,
             CountryJavaMapper countryMapper
     ) {
         return _ -> {

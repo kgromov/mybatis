@@ -8,7 +8,7 @@ import java.util.List;
 
 // mybatis is smart enough to map columns to properties by decapitalize 1st letter
 @Mapper
-public interface CountryJavaMapper extends BaseMapper<Country, String> {
+public interface CountryJavaMapper {
 
     @Select("SELECT * FROM country ORDER BY Code")
     List<Country> findAll();

@@ -13,21 +13,21 @@
         </association>
     </resultMap>
 
-    <select id="findAll" resultType="org.kgromov.model.City" resultMap="CityMapperMap">
+    <select id="findAll"  resultMap="CityMapperMap">
         SELECT c.*, co.Code, co.Name as country_name
         FROM city c
         JOIN country co ON c.CountryCode = co.Code
         ORDER BY c.Name
     </select>
 
-    <select id="findById" resultType="org.kgromov.model.City" resultMap="CityMapperMap">
+    <select id="findById" resultMap="CityMapperMap">
         SELECT c.*, co.Code, co.Name as country_name
         FROM city c
         JOIN country co ON c.CountryCode = co.Code
         WHERE ID = #{id}
     </select>
 
-    <select id="findAllByCountryCode" resultType="org.kgromov.model.City" resultMap="CityMapperMap">
+    <select id="findAllByCountryCode" resultMap="CityMapperMap">
         SELECT c.*, co.Name as country_name
         FROM city c
         JOIN country co ON c.CountryCode = co.Code
