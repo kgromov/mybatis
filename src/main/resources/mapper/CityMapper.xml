@@ -14,13 +14,16 @@
     </resultMap>
 
     <select id="findAll" resultType="org.kgromov.model.City" resultMap="CityMapperMap">
-        SELECT c.ID, c.Name, c.District, c.Population, co.Code, co.Name as country_name
+        SELECT c.*, co.Code, co.Name as country_name
         FROM city c
         JOIN country co ON c.CountryCode = co.Code
-        ORDER BY #{c.name}
+        ORDER BY c.Name
     </select>
 
     <select id="findById" resultType="org.kgromov.model.City" resultMap="CityMapperMap">
-        SELECT * FROM city WHERE ID = #{id}
+        SELECT c.*, co.Code, co.Name as country_name
+        FROM city c
+        JOIN country co ON c.CountryCode = co.Code
+        WHERE ID = #{id}
     </select>
 </mapper>

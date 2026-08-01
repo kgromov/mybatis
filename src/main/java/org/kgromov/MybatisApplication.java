@@ -38,7 +38,6 @@ public class MybatisApplication {
 //            log.info("All cities: {}", cities);
             var city = cityMapper.findById(1L);
             log.info("City: {}", city);
-            int a = 1;
         };
     }
 
