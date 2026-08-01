@@ -18,10 +18,10 @@ public class Country {
     public String governmentForm;
     public String continent;
     public String region;
-    public Short independenceYear;  // IndepYear
-    public BigDecimal lifespan;     // LifeExpectancy
+    public Short indepYear;
+    public BigDecimal lifeExpectancy;
     public BigDecimal gnp;
-    public BigDecimal gnpOld;       // GNPOld
+    public BigDecimal gnpOld;
     public String localName;
     public String headOfState;
     public String code2;

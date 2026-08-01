@@ -1,8 +1,6 @@
 package org.kgromov;
 
-import org.kgromov.mappers.CityMapper;
-import org.kgromov.mappers.CountryLanguageMapper;
-import org.kgromov.mappers.ICountryLanguageMapper;
+import org.kgromov.mappers.*;
 import org.kgromov.model.City;
 import org.kgromov.model.LanguageCode;
 import org.mybatis.spring.annotation.MapperScan;
@@ -26,7 +24,11 @@ public class MybatisApplication {
     }
 
     @Bean
-    ApplicationRunner applicationRunner(CountryLanguageMapper countryLanguageMapper, CityMapper cityMapper) {
+    ApplicationRunner applicationRunner(
+            CountryLanguageMapper countryLanguageMapper,
+            CityMapper cityMapper,
+            CountryJavaMapper countryMapper
+    ) {
         return _ -> {
             var allCountryLanguageCodes = countryLanguageMapper.findAll();
             log.info("All country language codes: {}", allCountryLanguageCodes);
@@ -40,6 +42,11 @@ public class MybatisApplication {
             log.info("City: {}", city);
             var citiesByCountryCode = cityMapper.findAllByCountryCode("AFG");
             log.info("Cities by country code: {}", citiesByCountryCode);
+
+            var countries = countryMapper.findAll();
+            log.debug("All countries: {}", countries);
+            var country = countryMapper.findById("AFG");
+            log.info("Country: {}", country);
         };
     }
 
