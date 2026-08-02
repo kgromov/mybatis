@@ -1,6 +1,9 @@
 package org.kgromov;
 
-import org.kgromov.mappers.*;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import org.kgromov.mappers.CityJavaMapper;
+import org.kgromov.mappers.CountryJavaMapper;
+import org.kgromov.mappers.CountryLanguageJavaMapper;
 import org.mybatis.spring.annotation.MapperScan;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,6 +13,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.context.annotation.Profile;
+import tools.jackson.databind.json.JsonMapper;
 
 
 @EnableAspectJAutoProxy
@@ -20,6 +24,14 @@ public class MybatisApplication {
 
     static void main(String[] args) {
         SpringApplication.run(MybatisApplication.class, args);
+    }
+
+    @Bean
+    JsonMapper jsonMapper() {
+        return JsonMapper.builder()
+                .changeDefaultPropertyInclusion(incl -> incl.withValueInclusion(JsonInclude.Include.NON_NULL))
+                .changeDefaultPropertyInclusion(incl -> incl.withContentInclusion(JsonInclude.Include.NON_NULL))
+                .build();
     }
 
     @Profile("!test")
