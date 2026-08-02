@@ -9,6 +9,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
+import org.springframework.context.annotation.Profile;
 
 
 @EnableAspectJAutoProxy
@@ -21,6 +22,7 @@ public class MybatisApplication {
         SpringApplication.run(MybatisApplication.class, args);
     }
 
+    @Profile("!test")
     @Bean
     ApplicationRunner applicationRunner(
             CountryLanguageJavaMapper countryLanguageMapper,
@@ -38,12 +40,12 @@ public class MybatisApplication {
             log.debug("All cities: {}", cities);
             var city = cityMapper.findById(1L);
             log.info("City: {}", city);
-            var citiesByCountryCode = cityMapper.findAllByCountryCode("AFG");
+            var citiesByCountryCode = cityMapper.findAllByCountryCode("UKR");
             log.info("Cities by country code: {}", citiesByCountryCode);
 
             var countries = countryMapper.findAll();
             log.debug("All countries: {}", countries);
-            var country = countryMapper.findById("AFG");
+            var country = countryMapper.findById("UKR");
             log.info("Country: {}", country);
         };
     }
