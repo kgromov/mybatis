@@ -1,4 +1,4 @@
-package org.kgromov;
+package org.kgromov.embedded;
 
 import org.junit.jupiter.api.Test;
 import org.kgromov.mappers.CountryLanguageMapper;

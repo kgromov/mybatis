@@ -1,4 +1,4 @@
-package org.kgromov;
+package org.kgromov.main;
 
 import org.mybatis.spring.boot.test.autoconfigure.MybatisTest;
 import org.springframework.boot.jdbc.test.autoconfigure.AutoConfigureTestDatabase;

@@ -1,7 +1,7 @@
-package org.kgromov.mappers;
+package org.kgromov.testcontainers;
 
 import org.junit.jupiter.api.Test;
-import org.kgromov.ProdDbMapperTest;
+import org.kgromov.mappers.CityMapper;
 import org.kgromov.model.City;
 import org.kgromov.model.Country;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,13 +10,13 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class CityMapperTest extends ProdDbMapperTest {
+class CityTestContainersMapperTest extends MysqlTestContainersTest {
     @Autowired
     private CityMapper cityMapper;
 
     @Test
     void findAll_whenAgainstProdDb_thenHas4079Cities() {
-        assertThat(cityMapper.findAll()).hasSize(4079);
+        assertThat(cityMapper.findAll()).hasSize(57);
     }
 
     @Test

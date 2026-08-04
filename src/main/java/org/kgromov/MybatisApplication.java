@@ -22,7 +22,7 @@ import tools.jackson.databind.json.JsonMapper;
 public class MybatisApplication {
     private static final Logger log = LoggerFactory.getLogger(MybatisApplication.class);
 
-    static void main(String[] args) {
+    public static void main(String[] args) {
         SpringApplication.run(MybatisApplication.class, args);
     }
 
