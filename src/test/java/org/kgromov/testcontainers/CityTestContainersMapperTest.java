@@ -21,8 +21,10 @@ class CityTestContainersMapperTest extends MysqlTestContainersTest {
 
     @Test
     void findAllById_whenAgainstProdDb_thenHasOdesa() {
-        var odesa = cityMapper.findById(3430L);
+        var cities = cityMapper.findByName("Odesa");
 
+        assertThat(cities).hasSize(1);
+        var odesa = cities.getFirst();
         assertThat(odesa.getName()).isEqualTo("Odesa");
         assertThat(odesa.getPopulation()).isGreaterThan(1_000_000);
         assertThat(odesa.getCountry().getName()).isEqualTo("Ukraine");
