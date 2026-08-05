@@ -15,12 +15,12 @@ class CityTestContainersMapperTest extends MysqlTestContainersTest {
     private CityMapper cityMapper;
 
     @Test
-    void findAll_whenAgainstProdDb_thenHas4079Cities() {
+    void findAll_whenAgainstTestContainers_thenReturnUkrainianCities() {
         assertThat(cityMapper.findAll()).hasSize(57);
     }
 
     @Test
-    void findAllById_whenAgainstProdDb_thenHasOdesa() {
+    void findAllById_whenAgainstTestContainers_thenHasOdesa() {
         var cities = cityMapper.findByName("Odesa");
 
         assertThat(cities).hasSize(1);
@@ -31,7 +31,7 @@ class CityTestContainersMapperTest extends MysqlTestContainersTest {
     }
 
     @Test
-    void findAllByCountryCode_whenAgainstProdDb_thenHasUkrainian57Cities() {
+    void findAllByCountryCode_whenAgainstTestContainers_thenHasUkrainian57Cities() {
         List<City> ukrainianCities = cityMapper.findAllByCountryCode("UKR");
 
         assertThat(ukrainianCities).hasSize(57);
