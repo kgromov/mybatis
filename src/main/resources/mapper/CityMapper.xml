@@ -13,6 +13,11 @@
         </association>
     </resultMap>
 
+    <resultMap id="CityGroupingMap" type="org.kgromov.model.GroupByName">
+        <result property="name" column="Name" />
+        <result property="count" column="count" />
+    </resultMap>
+
     <select id="findAll"  resultMap="CityMapperMap">
         SELECT c.*, co.Code, co.Name as country_name
         FROM city c
@@ -34,10 +39,28 @@
         WHERE c.CountryCode = #{countryCode}
         ORDER BY c.Name
     </select>
+
     <select id="findByName" resultMap="CityMapperMap">
         SELECT c.*, co.Code, co.Name as country_name
         FROM city c
         JOIN country co ON c.CountryCode = co.Code
         WHERE c.Name = #{name}
+    </select>
+
+    <select id="findAllByNotUniqueByName" resultMap="CityGroupingMap">
+        SELECT Name, COUNT(*) as count
+        FROM city
+        GROUP BY Name
+        HAVING COUNT(*) > 1
+        ORDER BY COUNT(*) DESC
+    </select>
+
+    <select id="findTop10ByNotUniqueByName" resultMap="CityGroupingMap">
+        SELECT Name, COUNT(*) as count
+        FROM city
+        GROUP BY Name
+        HAVING COUNT(*) > 1
+        ORDER BY COUNT(*) DESC
+        LIMIT 10
     </select>
 </mapper>

@@ -1,8 +1,10 @@
 package org.kgromov.mappers;
 
+import org.apache.ibatis.annotations.MapKey;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.kgromov.model.City;
+import org.kgromov.model.GroupByName;
 
 import java.util.List;
 
@@ -12,4 +14,10 @@ public interface CityMapper extends BaseMapper<City, Long> {
     List<City> findByName(String name);
 
     List<City> findAllByCountryCode(@Param("countryCode") String countryCode);
+
+    @MapKey("name")
+    List<GroupByName> findAllByNotUniqueByName();
+
+    @MapKey("name")
+    List<GroupByName> findTop10ByNotUniqueByName();
 }

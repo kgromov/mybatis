@@ -54,6 +54,9 @@ public class MybatisApplication {
 //            var countryLanguageCode = countryLanguageMapper.findById(new LanguageCode("UKR", "Ukrainian"));
             log.info("Country language code: {}", countryLanguageCode);
 
+            var notUniqueCities = cityMapper.findAllByNotUniqueByName();
+            log.info("Not unique city names: {}", notUniqueCities);
+
             var cities = cityMapper.findAll();
             log.debug("All cities: {}", cities);
             cities.stream().collect(Collectors.groupingBy(City::getName))
