@@ -9,5 +9,7 @@ import java.util.List;
 @Mapper
 public interface CityMapper extends BaseMapper<City, Long> {
 
+    List<City> findByName(String name);
+
     List<City> findAllByCountryCode(@Param("countryCode") String countryCode);
 }

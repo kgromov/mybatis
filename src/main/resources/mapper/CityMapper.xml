@@ -34,4 +34,10 @@
         WHERE c.CountryCode = #{countryCode}
         ORDER BY c.Name
     </select>
+    <select id="findByName" resultMap="CityMapperMap">
+        SELECT c.*, co.Code, co.Name as country_name
+        FROM city c
+        JOIN country co ON c.CountryCode = co.Code
+        WHERE c.Name = #{name}
+    </select>
 </mapper>

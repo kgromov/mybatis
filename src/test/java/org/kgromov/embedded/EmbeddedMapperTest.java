@@ -1,7 +1,6 @@
-package org.kgromov;
+package org.kgromov.embedded;
 
 import org.mybatis.spring.boot.test.autoconfigure.MybatisTest;
-import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ActiveProfiles;
 
 @ActiveProfiles("test")

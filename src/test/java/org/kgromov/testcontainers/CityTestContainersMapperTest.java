@@ -1,7 +1,7 @@
-package org.kgromov.mappers;
+package org.kgromov.testcontainers;
 
 import org.junit.jupiter.api.Test;
-import org.kgromov.ProdDbMapperTest;
+import org.kgromov.mappers.CityMapper;
 import org.kgromov.model.City;
 import org.kgromov.model.Country;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,26 +10,28 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class CityMapperTest extends ProdDbMapperTest {
+class CityTestContainersMapperTest extends MysqlTestContainersTest {
     @Autowired
     private CityMapper cityMapper;
 
     @Test
-    void findAll_whenAgainstProdDb_thenHas4079Cities() {
-        assertThat(cityMapper.findAll()).hasSize(4079);
+    void findAll_whenAgainstTestContainers_thenReturnUkrainianCities() {
+        assertThat(cityMapper.findAll()).hasSize(57);
     }
 
     @Test
-    void findAllById_whenAgainstProdDb_thenHasOdesa() {
-        var odesa = cityMapper.findById(3430L);
+    void findAllById_whenAgainstTestContainers_thenHasOdesa() {
+        var cities = cityMapper.findByName("Odesa");
 
+        assertThat(cities).hasSize(1);
+        var odesa = cities.getFirst();
         assertThat(odesa.getName()).isEqualTo("Odesa");
         assertThat(odesa.getPopulation()).isGreaterThan(1_000_000);
         assertThat(odesa.getCountry().getName()).isEqualTo("Ukraine");
     }
 
     @Test
-    void findAllByCountryCode_whenAgainstProdDb_thenHasUkrainian57Cities() {
+    void findAllByCountryCode_whenAgainstTestContainers_thenHasUkrainian57Cities() {
         List<City> ukrainianCities = cityMapper.findAllByCountryCode("UKR");
 
         assertThat(ukrainianCities).hasSize(57);
