@@ -4,7 +4,7 @@ import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
-import org.kgromov.mappers.CityJavaMapper;
+import org.kgromov.mappers.java.CityJavaMapper;
 import org.kgromov.mappers.CountryMapper;
 import org.kgromov.model.City;
 import org.kgromov.model.Country;

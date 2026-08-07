@@ -1,10 +1,9 @@
 package org.kgromov;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import org.kgromov.mappers.CityJavaMapper;
 import org.kgromov.mappers.CityMapper;
-import org.kgromov.mappers.CountryJavaMapper;
-import org.kgromov.mappers.CountryLanguageJavaMapper;
+import org.kgromov.mappers.java.CountryJavaMapper;
+import org.kgromov.mappers.java.CountryLanguageJavaMapper;
 import org.kgromov.model.City;
 import org.kgromov.model.Country;
 import org.mybatis.spring.annotation.MapperScan;
@@ -18,7 +17,6 @@ import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.context.annotation.Profile;
 import tools.jackson.databind.json.JsonMapper;
 
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 

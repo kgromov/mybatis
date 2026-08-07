@@ -29,6 +29,7 @@
     <properties>
         <java.version>25</java.version>
         <mybatis.version>4.0.1</mybatis.version>
+        <mybatis-flex.version>1.11.8</mybatis-flex.version>
         <testcontainers.mysql.version>1.21.4</testcontainers.mysql.version>
     </properties>
     <dependencies>
@@ -40,6 +41,12 @@
             <groupId>org.mybatis.spring.boot</groupId>
             <artifactId>mybatis-spring-boot-starter</artifactId>
             <version>${mybatis.version}</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.mybatis-flex</groupId>
+            <artifactId>mybatis-flex-spring-boot4-starter</artifactId>
+            <version>${mybatis-flex.version}</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
@@ -68,6 +75,13 @@
             <version>${mybatis.version}</version>
             <scope>test</scope>
         </dependency>
+       <!-- Use this as a samples with predefined model. schema/data.sql files still required to define
+        <dependency>
+            <groupId>com.mybatis-flex</groupId>
+            <artifactId>mybatis-flex-spring-boot-test</artifactId>
+            <version>${mybatis-flex.version}</version>
+            <scope>test</scope>
+        </dependency>-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-testcontainers</artifactId>

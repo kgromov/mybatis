@@ -1,4 +1,4 @@
-package org.kgromov.mappers;
+package org.kgromov.mappers.java;
 
 import org.apache.ibatis.annotations.*;
 import org.kgromov.model.CountryLanguage;
