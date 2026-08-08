@@ -6,7 +6,6 @@ import org.kgromov.mappers.java.CountryJavaMapper;
 import org.kgromov.mappers.java.CountryLanguageJavaMapper;
 import org.kgromov.model.City;
 import org.kgromov.model.Country;
-import org.mybatis.spring.annotation.MapperScan;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.ApplicationRunner;
@@ -21,7 +20,6 @@ import java.util.stream.Collectors;
 
 
 @EnableAspectJAutoProxy
-@MapperScan("org.kgromov.mappers")
 @SpringBootApplication
 public class MybatisApplication {
     private static final Logger log = LoggerFactory.getLogger(MybatisApplication.class);

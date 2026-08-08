@@ -23,7 +23,7 @@ public class City {
     public Long population;
     @RelationManyToOne(
             targetTable = "country",
-            selfField = "CountryCode",
+            selfField = "country",
             targetField = "Code"
     )
     public Country country;

@@ -1,11 +1,13 @@
 package org.kgromov.flex;
 
 import org.junit.jupiter.api.Test;
+import org.kgromov.config.MyBatisSessionFactoryConfig;
 import org.kgromov.mappers.flex.CityFlexMapper;
 import org.kgromov.model.City;
 import org.kgromov.model.Country;
 import org.mybatis.spring.boot.test.autoconfigure.MybatisTest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.util.List;
@@ -13,15 +15,37 @@ import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@ActiveProfiles("test")
+@ActiveProfiles({"test", "flex"})
+//@Import(MyBatisSessionFactoryConfig.class)
 @MybatisTest
 class CityFlexMapperTest {
     @Autowired
     private CityFlexMapper cityFlexMapper;
 
     @Test
-    void findAll_whenAgainstProdDb_thenHas4079Cities() {
-        assertThat(cityFlexMapper.selectAll()).hasSize(4079);
+    void selectAll_whenNoCitiesExist_thenReturnCitiesWithoutCountry() {
+        var allCities = cityFlexMapper.selectAll();
+
+        assertThat(allCities).hasSize(57);
+        assertThat(allCities).extracting(City::getId).isNotNull();
+        assertThat(allCities).extracting(City::getName).isNotNull();
+        assertThat(allCities).extracting(City::getPopulation).isNotNull();
+        assertThat(allCities).extracting(City::getDistrict).isNotNull();
+        assertThat(allCities).extracting(City::getCountry).isNull();
+    }
+
+    @Test
+    void selectAllWithRelations_whenNoCitiesExist_thenReturnCitiesWithCountry() {
+        var allCities = cityFlexMapper.selectAllWithRelations();
+
+        assertThat(allCities).hasSize(57);
+        assertThat(allCities).extracting(City::getId).isNotNull();
+        assertThat(allCities).extracting(City::getName).isNotNull();
+        assertThat(allCities).extracting(City::getPopulation).isNotNull();
+        assertThat(allCities).extracting(City::getDistrict).isNotNull();
+        assertThat(allCities).extracting(City::getCountry).isNotNull();
+        assertThat(allCities).extracting(City::getCountry).extracting(Country::getCode).containsOnly("UKR");
+        assertThat(allCities).extracting(City::getCountry).extracting(Country::getName).containsOnly("Ukraine");
     }
 
     @Test
@@ -52,6 +76,8 @@ class CityFlexMapperTest {
         assertThat(ukrainianCities).extracting(City::getCountry).extracting(Country::getName).containsOnly("Ukraine");
         assertThat(ukrainianCities).extracting(City::getName).contains("Odesa");
     }
+
+
 
     /*@Test
     void whenInsertAndSelectById_thenAccountIsPersisted() {
