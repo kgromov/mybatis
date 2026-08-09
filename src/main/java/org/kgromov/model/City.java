@@ -21,7 +21,7 @@ public class City {
     public String district;
     @Column("Population")
     public Long population;
-
+    // This seems to be a workaround for MyBatis Flex - redundant field - should be either countryCode or country
     @Column("CountryCode")
     public String countryCode;          // <-- add this: holds the actual FK value
 

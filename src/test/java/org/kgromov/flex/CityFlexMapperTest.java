@@ -1,6 +1,5 @@
 package org.kgromov.flex;
 
-import org.junit.Ignore;
 import org.junit.jupiter.api.*;
 import org.kgromov.mappers.flex.CityFlexMapper;
 import org.kgromov.mappers.flex.CountryFlexMapper;
@@ -12,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
+
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 
 class CityFlexMapperTest extends MyBatisFlexMapperTest {
@@ -106,7 +106,6 @@ class CityFlexMapperTest extends MyBatisFlexMapperTest {
         assertThat(ukrainianCities).extracting(City::getName).contains("Odesa");
     }
 
-    @Disabled
     @Test
     @Order(1)
     void insert_whenParentCountryExists_thenInsertNewCity() {
@@ -116,10 +115,44 @@ class CityFlexMapperTest extends MyBatisFlexMapperTest {
                 .district("Pity District")
                 .population(10L)
                 .country(ukraine)
+                .countryCode(ukraine.getCode())
                 .build();
 
         cityFlexMapper.insert(newCity);
 
-        assertThat(newCity.getId()).isEqualTo(58);
+        assertThat(newCity.getId()).isNotNull();
+        City insertedCity = cityFlexMapper.selectOneById(newCity.getId());
+        assertThat(insertedCity).isNotNull();
+        assertThat(insertedCity.getName()).isEqualTo("Pity Pen");
+    }
+
+    @Test
+    @Order(2)
+    void update_whenCityExists_thenUpdateExistingCity() {
+        Country ukraine = countryFlexMapper.selectOneById("UKR");
+        City odesa = cityFlexMapper.selectOneByMap(Map.of("name", "Odesa"));
+        odesa.setDistrict("Old city");
+        odesa.setPopulation(12L);
+        Long odesaId = odesa.getId();
+
+        cityFlexMapper.update(odesa);
+
+        City updatedCity = cityFlexMapper.selectOneWithRelationsById(odesa.getId());
+        assertThat(updatedCity).isNotNull();
+        assertThat(updatedCity.getId()).isEqualTo(odesaId);
+        assertThat(updatedCity.getName()).isEqualTo("Odesa");
+        assertThat(updatedCity.getPopulation()).isEqualTo(12L);
+        assertThat(updatedCity.getDistrict()).isEqualTo("Old city");
+        assertThat(updatedCity.getCountry().getName()).isEqualTo(ukraine.getName());
+    }
+
+    @Test
+    @Order(3)
+    void delete_whenAgainstTestContainers_thenInsertNewCity() {
+        cityFlexMapper.deleteById(58L);
+
+        City pityPen = cityFlexMapper.selectOneById(58L);
+
+        assertThat(pityPen).isNull();
     }
 }
