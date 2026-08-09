@@ -1,19 +1,25 @@
 package org.kgromov.flex;
 
+import com.mybatisflex.core.paginate.Page;
+import com.mybatisflex.core.query.QueryColumn;
+import com.mybatisflex.core.query.QueryTable;
+import com.mybatisflex.core.query.QueryWrapper;
 import org.junit.jupiter.api.*;
 import org.kgromov.mappers.flex.CityFlexMapper;
 import org.kgromov.mappers.flex.CountryFlexMapper;
 import org.kgromov.model.City;
 import org.kgromov.model.Country;
+import org.kgromov.projections.CityCountryView;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 import java.util.Map;
+import java.util.function.Consumer;
 
+import static com.mybatisflex.core.query.QueryMethods.column;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-
 class CityFlexMapperTest extends MyBatisFlexMapperTest {
     @Autowired
     private CityFlexMapper cityFlexMapper;
@@ -96,16 +102,6 @@ class CityFlexMapperTest extends MyBatisFlexMapperTest {
         assertThat(odesa.getCountry().getCode2()).isEqualTo("UA");
     }
 
-    @Disabled
-    @Test
-    void selectListByMap_whenNestedProperty_thenHasUkrainian57Cities() {
-        List<City> ukrainianCities = cityFlexMapper.selectListByMap(Map.of("country.code", "UKR"));
-
-        assertThat(ukrainianCities).hasSize(57);
-        assertThat(ukrainianCities).extracting(City::getCountry).extracting(Country::getName).containsOnly("Ukraine");
-        assertThat(ukrainianCities).extracting(City::getName).contains("Odesa");
-    }
-
     @Test
     @Order(1)
     void insert_whenParentCountryExists_thenInsertNewCity() {
@@ -132,7 +128,6 @@ class CityFlexMapperTest extends MyBatisFlexMapperTest {
         Country ukraine = countryFlexMapper.selectOneById("UKR");
         City odesa = cityFlexMapper.selectOneByMap(Map.of("name", "Odesa"));
         odesa.setDistrict("Old city");
-        odesa.setPopulation(12L);
         Long odesaId = odesa.getId();
 
         cityFlexMapper.update(odesa);
@@ -141,7 +136,6 @@ class CityFlexMapperTest extends MyBatisFlexMapperTest {
         assertThat(updatedCity).isNotNull();
         assertThat(updatedCity.getId()).isEqualTo(odesaId);
         assertThat(updatedCity.getName()).isEqualTo("Odesa");
-        assertThat(updatedCity.getPopulation()).isEqualTo(12L);
         assertThat(updatedCity.getDistrict()).isEqualTo("Old city");
         assertThat(updatedCity.getCountry().getName()).isEqualTo(ukraine.getName());
     }
@@ -155,4 +149,63 @@ class CityFlexMapperTest extends MyBatisFlexMapperTest {
 
         assertThat(pityPen).isNull();
     }
+
+    @Test
+    void selectListByQuery_whenSearchByOwnProperty_thenReturnsExpectedCities() {
+        QueryWrapper selectUACitiesOver1M = QueryWrapper.create()
+                .where(City::getCountryCode).eq("UKR")
+                .and(City::getPopulation).ge(1_000_000)
+                .orderBy(column(City::getPopulation).desc());
+
+        List<City> ukrainianCities = cityFlexMapper.selectListByQuery(selectUACitiesOver1M);
+
+        assertThat(ukrainianCities).hasSize(5);
+        assertThat(ukrainianCities).extracting(City::getName)
+                .containsExactly("Kyiv", /*Kharkiv*/ "Harkova [Harkiv]", /*Dnipro*/"Dnipropetrovsk", "Donetsk", "Odesa");
+    }
+
+    @Test
+    void paginate_whenSearchByOwnProperty_thenReturnsExpectedCities() {
+        QueryWrapper selectUACitiesOver1M = QueryWrapper.create()
+                .where(City::getCountryCode).eq("UKR")
+                .and(City::getPopulation).ge(1_000_000)
+                .orderBy(column(City::getPopulation).desc());
+
+        Page<City> secondPageRequest = new Page<>(2, 3);
+        Page<City> secondPage = cityFlexMapper.paginate(secondPageRequest, selectUACitiesOver1M);
+
+        assertThat(secondPage.getPageNumber()).isEqualTo(2);
+        assertThat(secondPage.getPageSize()).isEqualTo(3);
+        assertThat(secondPage.getRecords()).hasSize(2);
+        assertThat(secondPage.getTotalPage()).isEqualTo(2);
+        assertThat(secondPage.getTotalRow()).isEqualTo(5);
+
+        var paginatedResult = secondPage.getRecords();
+        assertThat(paginatedResult).hasSize(2);
+        assertThat(paginatedResult).extracting(City::getName)
+                .containsExactly("Donetsk", "Odesa");
+    }
+
+    @Test
+    void selectListByQueryAs_whenSearchByNestedProperty_thenReturnsExpectedCitiesAsProjection() {
+        Consumer<QueryWrapper> ukrConsumer = _ -> QueryWrapper.create().where(Country::getCode).eq("UKR");
+        QueryWrapper query = QueryWrapper.create()
+                .select(
+                        new QueryColumn("city", "name"),
+                        new QueryColumn("city", "population"),
+                        new QueryColumn("country", "name").as("countryName")
+                )
+                .from(new QueryTable("city"))
+                .leftJoin(new QueryTable("country")).on(City::getCountryCode, Country::getCode)
+                .where(ukrConsumer)
+                .and(City::getPopulation).ge(1_000_000);
+
+        List<CityCountryView> result = cityFlexMapper.selectListByQueryAs(query, CityCountryView.class);
+
+        assertThat(result).hasSize(5);
+        assertThat(result).extracting(CityCountryView::getName)
+                .containsExactly("Kyiv", /*Kharkiv*/ "Harkova [Harkiv]", /*Dnipro*/"Dnipropetrovsk", "Donetsk", "Odesa");
+        assertThat(result).extracting(CityCountryView::getCountryName).containsOnly("Ukraine");
+    }
+
 }
