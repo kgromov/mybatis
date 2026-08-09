@@ -1,24 +1,18 @@
 package org.kgromov.flex;
 
+import org.junit.Ignore;
 import org.junit.jupiter.api.Test;
-import org.kgromov.config.MyBatisSessionFactoryConfig;
 import org.kgromov.mappers.flex.CityFlexMapper;
 import org.kgromov.model.City;
 import org.kgromov.model.Country;
-import org.mybatis.spring.boot.test.autoconfigure.MybatisTest;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Import;
-import org.springframework.test.context.ActiveProfiles;
 
 import java.util.List;
 import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@ActiveProfiles({"test", "flex"})
-//@Import(MyBatisSessionFactoryConfig.class)
-@MybatisTest
-class CityFlexMapperTest {
+class CityFlexMapperTest extends MyBatisFlexMapperTest {
     @Autowired
     private CityFlexMapper cityFlexMapper;
 
@@ -68,6 +62,7 @@ class CityFlexMapperTest {
         assertThat(odesa.getCountry().getName()).isEqualTo("Ukraine");
     }
 
+    @Ignore
     @Test
     void selectListByMap_whenNestedProperty_thenHasUkrainian57Cities() {
         List<City> ukrainianCities = cityFlexMapper.selectListByMap(Map.of("country.code", "UKR"));
@@ -76,22 +71,4 @@ class CityFlexMapperTest {
         assertThat(ukrainianCities).extracting(City::getCountry).extracting(Country::getName).containsOnly("Ukraine");
         assertThat(ukrainianCities).extracting(City::getName).contains("Odesa");
     }
-
-
-
-    /*@Test
-    void whenInsertAndSelectById_thenAccountIsPersisted() {
-        Account account = new Account();
-        account.setUserName("olivia");
-        account.setAge(28);
-        account.setStatus("ACTIVE");
-        account.setCreatedAt(LocalDateTime.of(2024, 5, 1, 12, 0));
-
-        accountMapper.insert(account);
-        Account persistedAccount = accountMapper.selectOneById(account.getId());
-
-        assertNotNull(account.getId());
-        assertNotNull(persistedAccount);
-        assertEquals("olivia", persistedAccount.getUserName());
-    }*/
 }

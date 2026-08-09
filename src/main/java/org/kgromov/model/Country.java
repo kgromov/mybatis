@@ -17,7 +17,7 @@ import java.math.BigDecimal;
 @Builder
 @Table("country")
 public class Country {
-    @Id(keyType = KeyType.Auto)
+    @Id
     @Column("Code")
     public String code;
     @Column("Name")

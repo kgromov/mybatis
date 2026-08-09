@@ -21,10 +21,14 @@ public class City {
     public String district;
     @Column("Population")
     public Long population;
+
+    @Column("CountryCode")
+    public String countryCode;          // <-- add this: holds the actual FK value
+
     @RelationManyToOne(
             targetTable = "country",
-            selfField = "country",
-            targetField = "Code"
+            selfField = "countryCode",  // <-- point at the FK field, not "country"
+            targetField = "code"        // matches Country.code (Java field name, not "Code")
     )
     public Country country;
 }
