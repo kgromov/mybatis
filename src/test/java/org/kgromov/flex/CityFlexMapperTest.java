@@ -1,8 +1,9 @@
 package org.kgromov.flex;
 
 import org.junit.Ignore;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.kgromov.mappers.flex.CityFlexMapper;
+import org.kgromov.mappers.flex.CountryFlexMapper;
 import org.kgromov.model.City;
 import org.kgromov.model.Country;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,11 +12,15 @@ import java.util.List;
 import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 
 class CityFlexMapperTest extends MyBatisFlexMapperTest {
     @Autowired
     private CityFlexMapper cityFlexMapper;
+    @Autowired
+    private CountryFlexMapper countryFlexMapper;
 
+    @Order(0)
     @Test
     void selectAll_whenNoCitiesExist_thenReturnCitiesWithoutCountry() {
         var allCities = cityFlexMapper.selectAll();
@@ -25,9 +30,10 @@ class CityFlexMapperTest extends MyBatisFlexMapperTest {
         assertThat(allCities).extracting(City::getName).isNotNull();
         assertThat(allCities).extracting(City::getPopulation).isNotNull();
         assertThat(allCities).extracting(City::getDistrict).isNotNull();
-        assertThat(allCities).extracting(City::getCountry).isNull();
+        assertThat(allCities).extracting(City::getCountry).containsOnlyNulls();
     }
 
+    @Order(0)
     @Test
     void selectAllWithRelations_whenNoCitiesExist_thenReturnCitiesWithCountry() {
         var allCities = cityFlexMapper.selectAllWithRelations();
@@ -42,27 +48,55 @@ class CityFlexMapperTest extends MyBatisFlexMapperTest {
         assertThat(allCities).extracting(City::getCountry).extracting(Country::getName).containsOnly("Ukraine");
     }
 
+    @Order(0)
     @Test
-    void selectOneById_whenAgainstProdDb_thenHasOdesa() {
-        var odesa = cityFlexMapper.selectOneById(3430L);
+    void selectOneById_whenAgainstUkraineCities_thenHasKyivWithNullCountry() {
+        var kyiv = cityFlexMapper.selectOneById(1L);
 
-        assertThat(odesa).isNotNull();
-        assertThat(odesa.getName()).isEqualTo("Odesa");
-        assertThat(odesa.getPopulation()).isGreaterThan(1_000_000);
-        assertThat(odesa.getCountry().getName()).isEqualTo("Ukraine");
+        assertThat(kyiv).isNotNull();
+        assertThat(kyiv.getName()).isEqualTo("Kyiv");
+        assertThat(kyiv.getPopulation()).isGreaterThan(2_500_000);
+        assertThat(kyiv.getCountry()).isNull();
     }
 
+    @Order(0)
     @Test
-    void findAllById_whenSearchByUniqueName_thenHasOdesa() {
+    void selectOneById_whenAgainstUkraineCities_thenHasKyivWithCountryUkraine() {
+        var kyiv = cityFlexMapper.selectOneWithRelationsById(1L);
+
+        assertThat(kyiv).isNotNull();
+        assertThat(kyiv.getName()).isEqualTo("Kyiv");
+        assertThat(kyiv.getPopulation()).isGreaterThan(2_500_000);
+        assertThat(kyiv.getCountry()).isNotNull();
+        assertThat(kyiv.getCountry().getName()).isEqualTo("Ukraine");
+        assertThat(kyiv.getCountry().getIndepYear()).isEqualTo(Short.valueOf(("1991")));
+    }
+
+    @Order(0)
+    @Test
+    void selectOneByMap_whenSearchByUniqueName_thenHasOdesaWithNullCountry() {
         var odesa = cityFlexMapper.selectOneByMap(Map.of("name", "Odesa"));
 
         assertThat(odesa).isNotNull();
         assertThat(odesa.getName()).isEqualTo("Odesa");
         assertThat(odesa.getPopulation()).isGreaterThan(1_000_000);
-        assertThat(odesa.getCountry().getName()).isEqualTo("Ukraine");
+        assertThat(odesa.getCountry()).isNull();
     }
 
-    @Ignore
+    @Order(0)
+    @Test
+    void selectOneByMap_whenSearchByUniqueName_thenHasOdesaWithCountry() {
+        var odesa = cityFlexMapper.selectOneWithRelationsByMap(Map.of("name", "Odesa"));
+
+        assertThat(odesa).isNotNull();
+        assertThat(odesa.getName()).isEqualTo("Odesa");
+        assertThat(odesa.getPopulation()).isGreaterThan(1_000_000);
+        assertThat(odesa.getCountry().getName()).isNotNull();
+        assertThat(odesa.getCountry().getName()).isEqualTo("Ukraine");
+        assertThat(odesa.getCountry().getCode2()).isEqualTo("UA");
+    }
+
+    @Disabled
     @Test
     void selectListByMap_whenNestedProperty_thenHasUkrainian57Cities() {
         List<City> ukrainianCities = cityFlexMapper.selectListByMap(Map.of("country.code", "UKR"));
@@ -70,5 +104,22 @@ class CityFlexMapperTest extends MyBatisFlexMapperTest {
         assertThat(ukrainianCities).hasSize(57);
         assertThat(ukrainianCities).extracting(City::getCountry).extracting(Country::getName).containsOnly("Ukraine");
         assertThat(ukrainianCities).extracting(City::getName).contains("Odesa");
+    }
+
+    @Disabled
+    @Test
+    @Order(1)
+    void insert_whenParentCountryExists_thenInsertNewCity() {
+        Country ukraine = countryFlexMapper.selectOneById("UKR");
+        City newCity = City.builder()
+                .name("Pity Pen")
+                .district("Pity District")
+                .population(10L)
+                .country(ukraine)
+                .build();
+
+        cityFlexMapper.insert(newCity);
+
+        assertThat(newCity.getId()).isEqualTo(58);
     }
 }
