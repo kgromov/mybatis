@@ -1,11 +1,14 @@
 package org.kgromov.flex;
 
+import org.kgromov.config.MyBatisFlexSessionFactoryConfig;
+import org.mybatis.spring.boot.autoconfigure.MybatisAutoConfiguration;
 import org.mybatis.spring.boot.test.autoconfigure.MybatisTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ActiveProfiles;
 
 @ActiveProfiles({"test", "flex"})
-//@Import(MyBatisSessionFactoryConfig.class)
-@MybatisTest
+@Import(MyBatisFlexSessionFactoryConfig.class)
+@MybatisTest(excludeAutoConfiguration = MybatisAutoConfiguration.class)
 abstract class MyBatisFlexMapperTest {
 
     /*@Test
