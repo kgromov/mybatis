@@ -3,11 +3,13 @@ package org.kgromov.service;
 import lombok.RequiredArgsConstructor;
 import org.kgromov.mappers.CityMapper;
 import org.kgromov.model.City;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+@Profile("!flex")
 @RequiredArgsConstructor
 @Service
 public class CityService {

@@ -16,4 +16,3 @@ mybatis:
 logging:
   level:
     org.kgromov.mappers: DEBUG
-    org.kgromov.mappers.flex: TRACE

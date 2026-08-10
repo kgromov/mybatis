@@ -1,11 +1,16 @@
 package org.kgromov;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.mybatisflex.core.query.QueryColumn;
+import com.mybatisflex.core.query.QueryTable;
+import com.mybatisflex.core.query.QueryWrapper;
 import org.kgromov.mappers.CityMapper;
+import org.kgromov.mappers.flex.CountryFlexMapper;
 import org.kgromov.mappers.java.CountryJavaMapper;
 import org.kgromov.mappers.java.CountryLanguageJavaMapper;
 import org.kgromov.model.City;
 import org.kgromov.model.Country;
+import org.kgromov.model.projections.GroupingWithCountView;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.ApplicationRunner;
@@ -16,7 +21,10 @@ import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.context.annotation.Profile;
 import tools.jackson.databind.json.JsonMapper;
 
+import java.util.List;
 import java.util.stream.Collectors;
+
+import static com.mybatisflex.core.query.QueryMethods.count;
 
 
 @EnableAspectJAutoProxy
@@ -36,7 +44,16 @@ public class MybatisApplication {
                 .build();
     }
 
-    @Profile("!test")
+    @Profile({"flex", "!test"})
+    @Bean
+    ApplicationRunner flexRunner(CountryFlexMapper countryFlexMapper){
+        return _ -> {
+            List<GroupingWithCountView> grouping = countryFlexMapper.groupByContinentWithCount();
+            log.info("Grouping with count: {}", grouping);
+        };
+    }
+
+    @Profile({"default", "!test"})
     @Bean
     ApplicationRunner applicationRunner(
             CountryLanguageJavaMapper countryLanguageMapper,
@@ -52,6 +69,14 @@ public class MybatisApplication {
 
             var notUniqueCities = cityMapper.findAllByNotUniqueByName();
             log.info("Not unique city names: {}", notUniqueCities);
+
+            QueryColumn continent = new QueryColumn("continent");
+            QueryColumn countColumn = count(new QueryColumn("code")).as("count");
+            QueryWrapper query = QueryWrapper.create()
+                    .select(continent.as("grouping"), countColumn)
+                    .from(new QueryTable("country"))
+                    .groupBy(continent)
+                    .orderBy(countColumn.desc());
 
             var cities = cityMapper.findAll();
             log.debug("All cities: {}", cities);

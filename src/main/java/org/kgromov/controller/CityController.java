@@ -4,12 +4,14 @@ import lombok.RequiredArgsConstructor;
 import org.kgromov.mappers.CityMapper;
 import org.kgromov.model.City;
 import org.kgromov.service.CityService;
+import org.springframework.context.annotation.Profile;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 import static java.util.Objects.nonNull;
 
+@Profile("!flex")
 @RequiredArgsConstructor
 @RequestMapping("/api/cities")
 @RestController

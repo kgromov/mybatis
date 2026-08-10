@@ -9,7 +9,7 @@ import org.kgromov.mappers.flex.CityFlexMapper;
 import org.kgromov.mappers.flex.CountryFlexMapper;
 import org.kgromov.model.City;
 import org.kgromov.model.Country;
-import org.kgromov.projections.CityCountryView;
+import org.kgromov.model.projections.CityCountryView;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
