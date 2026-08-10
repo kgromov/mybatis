@@ -3,7 +3,7 @@ package org.kgromov.mappers;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.kgromov.model.City;
-import org.kgromov.model.GroupByName;
+import org.kgromov.model.projections.GroupByName;
 
 import java.util.List;
 

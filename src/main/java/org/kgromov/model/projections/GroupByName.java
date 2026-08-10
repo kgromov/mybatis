@@ -1,4 +1,4 @@
-package org.kgromov.model;
+package org.kgromov.model.projections;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

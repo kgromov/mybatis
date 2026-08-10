@@ -13,7 +13,7 @@
         </association>
     </resultMap>
 
-    <resultMap id="CityGroupingMap" type="org.kgromov.model.GroupByName">
+    <resultMap id="CityGroupingMap" type="org.kgromov.model.projections.GroupByName">
         <result property="name" column="Name" />
         <result property="count" column="count" />
     </resultMap>
