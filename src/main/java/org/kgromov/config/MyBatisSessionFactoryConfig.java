@@ -10,7 +10,7 @@ import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 
 import javax.sql.DataSource;
 
-@Profile({"default", "!flex"})
+@Profile({"!flex"})
 @Configuration
 @MapperScan(
         basePackages = "org.kgromov.mappers",

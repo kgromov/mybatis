@@ -13,29 +13,28 @@ import java.util.List;
 
 import static com.mybatisflex.core.query.QueryMethods.count;
 import static com.mybatisflex.core.query.QueryMethods.groupConcat;
+import static org.kgromov.model.table.CountryTableDef.COUNTRY;
 
 @Mapper
 public interface CountryFlexMapper extends BaseMapper<Country> {
 
     default List<GroupingWithCountView> groupByContinentWithCount() {
-        QueryColumn continent = new QueryColumn("continent");
-        QueryColumn countColumn = count(new QueryColumn("code")).as("count");
+        QueryColumn countColumn = count(COUNTRY.CODE).as("count");
         QueryWrapper query = QueryWrapper.create()
-                .select(continent.as("grouping"), countColumn)
+                .select(COUNTRY.CONTINENT.as("grouping"), countColumn)
                 .from(new QueryTable("country"))
-                .groupBy(continent)
+                .groupBy(COUNTRY.CONTINENT)
                 .orderBy(countColumn.desc());
         return this.selectListByQueryAs(query, GroupingWithCountView.class);
     }
 
-    default List<GroupingWithGroupConcat> groupByContinentWithNames() {
-        QueryColumn continent = new QueryColumn("continent");
-        QueryColumn countColumn = groupConcat(new QueryColumn("name")).as("concatenation");
+    default List<GroupingWithGroupConcat> groupByContinentWithNames() {;
+        QueryColumn countColumn = groupConcat(COUNTRY.NAME).as("concatenation");
         QueryWrapper query = QueryWrapper.create()
-                .select(continent.as("grouping"), countColumn)
+                .select(COUNTRY.CONTINENT.as("grouping"), countColumn)
                 .from(new QueryTable("country"))
-                .groupBy(continent)
-                .orderBy(continent.asc());
+                .groupBy(COUNTRY.CONTINENT)
+                .orderBy(COUNTRY.CONTINENT.asc());
         return this.selectListByQueryAs(query, GroupingWithGroupConcat.class);
     }
 }

@@ -1,10 +1,12 @@
 package org.kgromov.flex;
 
 import com.mybatisflex.core.paginate.Page;
-import com.mybatisflex.core.query.QueryColumn;
 import com.mybatisflex.core.query.QueryTable;
 import com.mybatisflex.core.query.QueryWrapper;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 import org.kgromov.mappers.flex.CityFlexMapper;
 import org.kgromov.mappers.flex.CountryFlexMapper;
 import org.kgromov.model.City;
@@ -18,6 +20,8 @@ import java.util.function.Consumer;
 
 import static com.mybatisflex.core.query.QueryMethods.column;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.kgromov.model.table.CityTableDef.CITY;
+import static org.kgromov.model.table.CountryTableDef.COUNTRY;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class CityFlexMapperTest extends MyBatisFlexMapperTest {
@@ -190,11 +194,7 @@ class CityFlexMapperTest extends MyBatisFlexMapperTest {
     void selectListByQueryAs_whenSearchByNestedProperty_thenReturnsExpectedCitiesAsProjection() {
         Consumer<QueryWrapper> ukrConsumer = _ -> QueryWrapper.create().where(Country::getCode).eq("UKR");
         QueryWrapper query = QueryWrapper.create()
-                .select(
-                        new QueryColumn("city", "name"),
-                        new QueryColumn("city", "population"),
-                        new QueryColumn("country", "name").as("countryName")
-                )
+                .select(CITY.NAME, CITY.POPULATION, COUNTRY.NAME.as("countryName"))
                 .from(new QueryTable("city"))
                 .leftJoin(new QueryTable("country")).on(City::getCountryCode, Country::getCode)
                 .where(ukrConsumer)
